@@ -9,15 +9,22 @@ using namespace std;
 int main() {
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
-	int n;
+	int n, d;
 
-	cin >> n;
+	cin >> n >> d;
 
 	std::default_random_engine generator(seed);
 	std::uniform_int_distribution<int> point_distribution(0, MAX_RANGE);
 
+	cout << n << ' '  << d << endl;
+
 	for (int i = 0; i < n; i++) {
-		cout << point_distribution(generator) << ' ' << point_distribution(generator) << endl;
+		cout << point_distribution(generator);
+		
+		for (int j = 1; j < d; j++) {
+			cout << ' ' << point_distribution(generator);
+		}
+		cout << endl;
 	}
 
 	return 0;
