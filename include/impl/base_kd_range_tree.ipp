@@ -40,15 +40,19 @@ void BaseKDRangeTree<T, Node>::print() {
 
 template <typename T, class Node>
 void BaseKDRangeTree<T, Node>::build(Node *&node, std::vector<std::vector<int> > &points, int low, int high, int dimension) {
-	if (low > high || dimension == this->dimensions_) return;
+	if (low > high || dimension == this->dimensions_) {
+		node = nullptr;
+		return;
+	}
 	if (low == high) {
 		node = new Node(points[low][dimension]);
 		return;
 	}
 
+
 	int mid = (low + high) / 2;
 
-	Node *low_child, *high_child;
+	Node *low_child = nullptr, *high_child = nullptr;
 
 	this->build(low_child, points, low, mid, dimension);
 	this->build(high_child, points, mid + 1, high, dimension);
@@ -58,22 +62,29 @@ void BaseKDRangeTree<T, Node>::build(Node *&node, std::vector<std::vector<int> >
 	node->low_ = low_child;
 	node->high_ = high_child;
 
-	std::vector<std::vector<int> > copy(points.begin() + low, points.begin() + high + 1);
-	Compare cmp(dimension + 1);
+	if (dimension < this->dimensions_ - 1) {
+		std::vector<std::vector<int> > copy(points.begin() + low, points.begin() + high);
+		Compare cmp(dimension + 1);
 
-	std::sort(copy.begin(), copy.end(), cmp);
+		std::sort(copy.begin(), copy.end(), cmp);
 
-	this->build(node->down_, copy, 0, copy.size() - 1, dimension + 1);
+		this->build(node->down_, copy, 0, copy.size() - 1, dimension + 1);
+	}
 }
 
 template <typename T, class Node>
 std::vector<std::vector<int> > BaseKDRangeTree<T, Node>::query(Node *node, std::vector<int> &lower, std::vector<int> &higher, int dimension) {
-	if (node == nullptr) return {};
-	if (lower[dimension] > higher[dimension]) return {};
+	if (node == nullptr) return std::vector<std::vector<int> >(0);
+	if (lower[dimension] > higher[dimension]) return std::vector<std::vector<int> >(0);
+
 
 	if (node->low_ == nullptr && node->high_ == nullptr) {
-		if (dimension == this->dimensions_ - 1) return std::vector<std::vector<int> >(1, std::vector<int>(1, node->position_));
-		else this->query(node->down_, lower, higher, dimension + 1);
+		if (dimension == this->dimensions_ - 1) {
+			return std::vector<std::vector<int> >(1, std::vector<int>(1, node->position_));
+		}
+		else {
+			return this->query(node->down_, lower, higher, dimension + 1);
+		}
 	}
 
 	std::vector<std::vector<int> > low_points, high_points;
@@ -90,15 +101,15 @@ template <typename T, class Node>
 void BaseKDRangeTree<T, Node>::print(Node *node, int level) {
 	if (node == nullptr) return;
 
-	this->print(node->high_, level + 1);
-	this->print(node->low_, level + 1);
+	this->print(node->down_, level + 1);
 
 	for (int l = 0; l < level; l++) {
 		std::cout << "    ";
 	}
 	std::cout << node->position_ << std::endl;
 
-	this->print(node->down_, level + 1);
+	this->print(node->high_, level + 1);
+	this->print(node->low_, level + 1);
 }
 
 template <typename T, class Node>

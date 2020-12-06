@@ -2,7 +2,7 @@
 #include <chrono>
 #include <random>
 
-#define MAX_RANGE 100
+#define MAX_RANGE 10000
 
 using namespace std;
 

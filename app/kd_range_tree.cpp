@@ -44,13 +44,6 @@ int main() {
 		end = chrono::steady_clock::now();
 
 		total_time += chrono::duration_cast<chrono::microseconds>(end - begin).count();
-
-		for (auto point : results) {
-			for (auto k : point) {
-				cout << k << ' ';
-			}
-			cout << endl;
-		}
 	}
 
 	cout << "Total time: " << total_time << " us" << endl;
