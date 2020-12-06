@@ -23,5 +23,5 @@ Default datasets are stored in `data/input/` directory. Generated datasets can b
 Manually generated datasets can be tested by redirecting the file content as input to the main Range tree executable. An example is shown below.
 
 ```
-./bin/kd_range_tree data/input/manual.in
+./bin/kd_range_tree < data/input/manual.in
 ```
