@@ -14,7 +14,7 @@ Generate test sets with `generate_points.sh` by giving the desired number of que
 ./generate_points.sh <number_of_queries> [<dataset_size> [<dimensions>] ]
 ```
 
-Default datasets are stored in `data/input/` directory. Generated datasets can be tested with the following command
+Default values for dataset\_size and dimensions are 100000 and 2 respectively. Example datasets are stored in `data/input/` directory. Generated datasets can be tested with the following command
 
 ```
 ./test_performance.sh <number_of_queries>
