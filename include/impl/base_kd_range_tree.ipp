@@ -30,7 +30,7 @@ BaseKDRangeTree<T, Node>::~BaseKDRangeTree() {
 
 template <typename T, class Node>
 std::vector<std::vector<int> > BaseKDRangeTree<T, Node>::query(std::vector<int> &lower, std::vector<int> &higher) {
-	this->query(this->head_, lower, higher, 0);
+	return this->query(this->head_, lower, higher, 0);
 }
 
 template <typename T, class Node>
@@ -68,11 +68,11 @@ void BaseKDRangeTree<T, Node>::build(Node *&node, std::vector<std::vector<int> >
 
 template <typename T, class Node>
 std::vector<std::vector<int> > BaseKDRangeTree<T, Node>::query(Node *node, std::vector<int> &lower, std::vector<int> &higher, int dimension) {
-	if (this->node == nullptr) return {};
+	if (node == nullptr) return {};
 	if (lower[dimension] > higher[dimension]) return {};
 
-	if (node->is_leave()) {
-		if (dimension == this->dimensions_ - 1) return {node->values_};
+	if (node->low_ == nullptr && node->high_ == nullptr) {
+		if (dimension == this->dimensions_ - 1) return std::vector<std::vector<int> >(1, std::vector<int>(1, node->position_));
 		else this->query(node->down_, lower, higher, dimension + 1);
 	}
 
