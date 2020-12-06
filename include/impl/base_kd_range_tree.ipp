@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 #include "base_kd_range_tree.hpp"
 #include "compare.hpp"
